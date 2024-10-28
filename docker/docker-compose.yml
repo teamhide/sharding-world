@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  mysql1:
+    image: mysql:8.0.33
+    container_name: sharding-mysql-1
+    restart: always
+    ports:
+      - '33061:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysqldb1:/var/lib/mysql
+
+  mysql2:
+    image: mysql:8.0.33
+    container_name: sharding-mysql-2
+    restart: always
+    ports:
+      - '33062:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysqldb2:/var/lib/mysql
+
+  mysql3:
+    image: mysql:8.0.33
+    container_name: sharding-mysql-3
+    restart: always
+    ports:
+      - '33063:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysqldb3:/var/lib/mysql
+
+volumes:
+  mysqldb1:
+  mysqldb2:
+  mysqldb3:
