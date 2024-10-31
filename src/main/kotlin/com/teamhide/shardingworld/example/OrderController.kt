@@ -1,5 +1,6 @@
 package com.teamhide.shardingworld.example
 
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,7 +20,7 @@ class OrderController(
     }
 
     @PostMapping("")
-    fun saveOrder(@RequestBody request: SaveOrderRequest) {
+    fun saveOrder(@RequestBody @Valid request: SaveOrderRequest) {
         orderService.saveOrder(userId = request.userId, price = request.price)
     }
 }

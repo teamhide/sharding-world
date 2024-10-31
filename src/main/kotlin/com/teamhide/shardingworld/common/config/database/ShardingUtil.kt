@@ -23,7 +23,7 @@ fun <T> sharding(shardKey: Int, func: () -> T): T {
     val dataSourceConfig = ApplicationContextProvider.getBean(DataSourceConfig::class.java)
     val shardCount = dataSourceConfig.getShardCount()
 
-    ShardingContextHolder.set(shardKey.mod(shardCount))
+    ShardingContextHolder.set(shardKey.mod(shardCount) + 1)
     val result = func.invoke()
     ShardingContextHolder.clear()
 

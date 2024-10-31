@@ -39,23 +39,6 @@ spring:
           pool-name: 'shard-2-read-pool'
           driver-class-name: com.mysql.cj.jdbc.Driver
           read-only: true
-      shard-3:
-        writer:
-          minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33065/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-          username: sharding
-          password: sharding
-          pool-name: 'shard-3-read-write-pool'
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          read-only: false
-        reader:
-          minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33066/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-          username: sharding
-          password: sharding
-          pool-name: 'shard-3-read-pool'
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          read-only: true
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQLDialect

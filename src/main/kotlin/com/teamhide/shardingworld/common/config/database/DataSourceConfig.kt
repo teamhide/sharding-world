@@ -15,6 +15,8 @@ import javax.sql.DataSource
 class DataSourceConfig(
     private val shardProperties: ShardProperties,
 ) {
+    private val dataSourceMap = makeDataSourceMap()
+
     companion object {
         private const val DEFAULT_SHARD_NUMBER = 1
     }
@@ -22,7 +24,6 @@ class DataSourceConfig(
     @Bean
     fun shardingDataSource(): DataSource {
         val routingDataSource = RoutingDataSource()
-        val dataSourceMap = makeDataSourceMap()
 
         val defaultShardKey = RoutingDataSource.makeShardKey(shardNumber = DEFAULT_SHARD_NUMBER, shardType = ShardType.WRITER)
         routingDataSource.setTargetDataSources(dataSourceMap)
@@ -62,4 +63,8 @@ class DataSourceConfig(
     }
 
     fun getShardCount(): Int = shardProperties.shards.size
+
+    fun getAllDataSources(): List<DataSource> {
+        return dataSourceMap.values.filterIsInstance<DataSource>()
+    }
 }
