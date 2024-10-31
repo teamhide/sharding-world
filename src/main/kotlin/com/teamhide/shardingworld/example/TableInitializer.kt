@@ -1,5 +1,6 @@
-package com.teamhide.shardingworld.common.config.database
+package com.teamhide.shardingworld.example
 
+import com.teamhide.shardingworld.common.config.database.DataSourceConfig
 import jakarta.annotation.PostConstruct
 import org.flywaydb.core.Flyway
 import org.springframework.beans.factory.annotation.Value

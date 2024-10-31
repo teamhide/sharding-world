@@ -64,6 +64,11 @@ class DataSourceConfig(
 
     fun getShardCount(): Int = shardProperties.shards.size
 
+    fun getDataSourceByShardNumber(shardNumber: Int, shardType: ShardType): DataSource? {
+        val shardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, shardType = shardType)
+        return dataSourceMap[shardKey] as? DataSource
+    }
+
     fun getAllDataSources(): List<DataSource> {
         return dataSourceMap.values.filterIsInstance<DataSource>()
     }

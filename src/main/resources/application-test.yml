@@ -1,14 +1,10 @@
-server:
-  port: 8080
 spring:
-  main:
-    banner-mode: off
   datasource:
     shards:
       shard-1:
         writer:
           minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33061/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+          jdbc-url: jdbc:mysql://localhost:33061/sharding_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
           username: sharding
           password: sharding
           pool-name: 'shard-1-read-write-pool'
@@ -16,7 +12,7 @@ spring:
           read-only: false
         reader:
           minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33062/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+          jdbc-url: jdbc:mysql://localhost:33062/sharding_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
           username: sharding
           password: sharding
           pool-name: 'shard-1-read-pool'
@@ -25,7 +21,7 @@ spring:
       shard-2:
         writer:
           minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33063/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+          jdbc-url: jdbc:mysql://localhost:33063/sharding_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
           username: sharding
           password: sharding
           pool-name: 'shard-2-read-write-pool'
@@ -33,7 +29,7 @@ spring:
           read-only: false
         reader:
           minimum-idle: 0
-          jdbc-url: jdbc:mysql://localhost:33064/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+          jdbc-url: jdbc:mysql://localhost:33064/sharding_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
           username: sharding
           password: sharding
           pool-name: 'shard-2-read-pool'
@@ -48,14 +44,7 @@ spring:
   flyway:
     enabled: false
     baseline-on-migrate: true
-    url: jdbc:mysql://localhost:33061/sharding?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:33061/sharding_test?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     user: sharding
     password: sharding
     locations: classpath:db/migration
-logging:
-  level:
-    org.springframework.kafka.*: OFF
-    org.springframework.kafka.listener.[KafkaMessageListenerContainer$ListenerConsumer]: OFF
-    org.apache.kafka.*: OFF
-    kafka.*: OFF
-    org.apache.zookeeper.*: OFF

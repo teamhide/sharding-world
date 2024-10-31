@@ -42,6 +42,10 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:4.0.0")
     testImplementation("com.squareup.okhttp3:okhttp:4.11.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.2")
+    testImplementation("io.kotest:kotest-framework-datatest:5.6.2")
+    testImplementation("io.kotest:kotest-assertions-core:5.6.2")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -83,18 +87,6 @@ tasks.test {
     outputs.dir(snippetsDir)
     minHeapSize = "2048m"
     maxHeapSize = "2048m"
-}
-
-tasks.register("testUnit", Test::class) {
-    useJUnitPlatform()
-    systemProperties["spring.profiles.active"] = "test"
-    exclude("**/*ControllerTest*")
-}
-
-tasks.register("teste2e", Test::class) {
-    useJUnitPlatform()
-    systemProperties["spring.profiles.active"] = "test"
-    include("**/*ControllerTest*")
 }
 
 tasks.jacocoTestReport {
