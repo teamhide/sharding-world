@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  mysql1:
+  mysql-shard-1-writer:
     image: mysql:8.0.33
-    container_name: sharding-mysql-1
+    container_name: mysql-shard-1-writer
     restart: always
     ports:
       - '33061:3306'
@@ -14,11 +14,10 @@ services:
       TZ: 'Asia/Seoul'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysqldb1:/var/lib/mysql
-
-  mysql2:
+      - mysql-shard-1-writer-db:/var/lib/mysql
+  mysql-shard-1-reader:
     image: mysql:8.0.33
-    container_name: sharding-mysql-2
+    container_name: mysql-shard-1-reader
     restart: always
     ports:
       - '33062:3306'
@@ -30,11 +29,10 @@ services:
       TZ: 'Asia/Seoul'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysqldb2:/var/lib/mysql
-
-  mysql3:
+      - mysql-shard-1-reader-db:/var/lib/mysql
+  mysql-shard-2-writer:
     image: mysql:8.0.33
-    container_name: sharding-mysql-3
+    container_name: mysql-shard-2-writer
     restart: always
     ports:
       - '33063:3306'
@@ -46,9 +44,57 @@ services:
       TZ: 'Asia/Seoul'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysqldb3:/var/lib/mysql
+      - mysql-shard-2-writer-db:/var/lib/mysql
+  mysql-shard-2-reader:
+    image: mysql:8.0.33
+    container_name: mysql-shard-2-reader
+    restart: always
+    ports:
+      - '33064:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-shard-2-reader-db:/var/lib/mysql
+  mysql-shard-3-writer:
+    image: mysql:8.0.33
+    container_name: mysql-shard-3-writer
+    restart: always
+    ports:
+      - '33065:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-shard-3-writer-db:/var/lib/mysql
+  mysql-shard-3-reader:
+    image: mysql:8.0.33
+    container_name: mysql-shard-3-reader
+    restart: always
+    ports:
+      - '33066:3306'
+    environment:
+      MYSQL_USER: sharding
+      MYSQL_PASSWORD: sharding
+      MYSQL_DATABASE: sharding
+      MYSQL_ROOT_PASSWORD: sharding
+      TZ: 'Asia/Seoul'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-shard-3-reader-db:/var/lib/mysql
 
 volumes:
-  mysqldb1:
-  mysqldb2:
-  mysqldb3:
+  mysql-shard-1-writer-db:
+  mysql-shard-1-reader-db:
+  mysql-shard-2-writer-db:
+  mysql-shard-2-reader-db:
+  mysql-shard-3-writer-db:
+  mysql-shard-3-reader-db:

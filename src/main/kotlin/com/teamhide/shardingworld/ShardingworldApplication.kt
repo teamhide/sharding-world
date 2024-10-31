@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class ShardingworldApplication
 
 fun main(args: Array<String>) {
-	runApplication<ShardingworldApplication>(*args)
+    runApplication<ShardingworldApplication>(*args)
 }
