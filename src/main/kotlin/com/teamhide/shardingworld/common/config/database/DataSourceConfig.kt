@@ -15,28 +15,16 @@ import javax.sql.DataSource
 class DataSourceConfig(
     private val shardProperties: ShardProperties,
 ) {
-    private var shardCount: Int = 0
+    companion object {
+        private const val DEFAULT_SHARD_NUMBER = 1
+    }
 
     @Bean
     fun shardingDataSource(): DataSource {
         val routingDataSource = RoutingDataSource()
-        val dataSourceMap = mutableMapOf<Any, Any>()
+        val dataSourceMap = makeDataSourceMap()
 
-        for ((shardName, property) in shardProperties.shards.entries) {
-            val shardNumber = extractShardNumber(shardName = shardName)
-            val writerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, shardType = ShardType.WRITER)
-            val readerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, shardType = ShardType.READER)
-
-            val writerDataSource = createDataSource(shardDb = property.writer)
-            val readerDataSource = createDataSource(shardDb = property.reader)
-
-            dataSourceMap[writerShardKey] = writerDataSource
-            dataSourceMap[readerShardKey] = readerDataSource
-
-            increaseShardCount()
-        }
-
-        val defaultShardKey = RoutingDataSource.makeShardKey(shardNumber = 1, shardType = ShardType.WRITER)
+        val defaultShardKey = RoutingDataSource.makeShardKey(shardNumber = DEFAULT_SHARD_NUMBER, shardType = ShardType.WRITER)
         routingDataSource.setTargetDataSources(dataSourceMap)
         routingDataSource.setDefaultTargetDataSource(dataSourceMap[defaultShardKey]!!)
         return routingDataSource
@@ -59,13 +47,19 @@ class DataSourceConfig(
         return HikariDataSource(config)
     }
 
+    private fun makeDataSourceMap(): MutableMap<Any, Any> {
+        val dataSourceMap = mutableMapOf<Any, Any>()
+        shardProperties.shards.forEach { (shardName, property) ->
+            val shardNumber = extractShardNumber(shardName)
+            dataSourceMap[RoutingDataSource.makeShardKey(shardNumber, ShardType.WRITER)] = createDataSource(property.writer)
+            dataSourceMap[RoutingDataSource.makeShardKey(shardNumber, ShardType.READER)] = createDataSource(property.reader)
+        }
+        return dataSourceMap
+    }
+
     private fun extractShardNumber(shardName: String): Int {
         return shardName.split("-")[1].toInt()
     }
 
-    private fun increaseShardCount() {
-        this.shardCount += 1
-    }
-
-    fun getShardCount(): Int = this.shardCount
+    fun getShardCount(): Int = shardProperties.shards.size
 }
