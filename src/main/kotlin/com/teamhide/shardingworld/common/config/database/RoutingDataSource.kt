@@ -6,24 +6,16 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 class RoutingDataSource : AbstractRoutingDataSource() {
     companion object {
         private const val SHARD_PREFIX = "shard"
-        private const val WRITER = "writer"
-        private const val READER = "reader"
 
-        fun makeShardKey(shardNumber: Int, readOnly: Boolean): String {
-            val isReader = if (readOnly) {
-                READER
-            } else {
-                WRITER
-            }
-            return "$SHARD_PREFIX-$shardNumber-$isReader"
+        fun makeShardKey(shardNumber: Int, shardType: ShardType): String {
+            return "$SHARD_PREFIX-$shardNumber-${shardType.name.lowercase()}"
         }
     }
 
     override fun determineCurrentLookupKey(): Any {
         val shardNumber = ShardingContextHolder.get()
-        return if (TransactionSynchronizationManager.isCurrentTransactionReadOnly())
-            makeShardKey(shardNumber = shardNumber, readOnly = true)
-        else
-            makeShardKey(shardNumber = shardNumber, readOnly = false)
+        val isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+        val shardType = if (isReadOnly) ShardType.READER else ShardType.WRITER
+        return makeShardKey(shardNumber = shardNumber, shardType = shardType)
     }
 }

@@ -24,8 +24,8 @@ class DataSourceConfig(
 
         for ((shardName, property) in shardProperties.shards.entries) {
             val shardNumber = extractShardNumber(shardName = shardName)
-            val writerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, readOnly = false)
-            val readerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, readOnly = true)
+            val writerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, shardType = ShardType.WRITER)
+            val readerShardKey = RoutingDataSource.makeShardKey(shardNumber = shardNumber, shardType = ShardType.READER)
 
             val writerDataSource = createDataSource(shardDb = property.writer)
             val readerDataSource = createDataSource(shardDb = property.reader)
@@ -36,7 +36,7 @@ class DataSourceConfig(
             increaseShardCount()
         }
 
-        val defaultShardKey = RoutingDataSource.makeShardKey(shardNumber = 1, readOnly = false)
+        val defaultShardKey = RoutingDataSource.makeShardKey(shardNumber = 1, shardType = ShardType.WRITER)
         routingDataSource.setTargetDataSources(dataSourceMap)
         routingDataSource.setDefaultTargetDataSource(dataSourceMap[defaultShardKey]!!)
         return routingDataSource
